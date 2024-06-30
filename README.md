@@ -45,7 +45,7 @@ Additionally, the tree class includes functions for iterators:
 
 <type_of_iterator> end_<type_of_iterator>_order() { return <type_of_iterator>(nullptr); }
 
-# Special properties of iterators
+## Special properties of iterators
 
 (1) Preorder , Post-Order , In-order , Heap iterators working good just on binary tree.
 
@@ -61,7 +61,7 @@ for compiltion should write the command `make tree`
 and for compiltion of test `make test`
 
 
-# GUI 
+## GUI 
 
 Type: SFML(Simple and Fast Multimedia Library).
 
@@ -70,5 +70,5 @@ The command for install On Ubuntu: - "sudo apt-get install libsfml-dev".
 The GUI shows the tree structure in a simple way on the screen.
 
 
-# Integrity checks
+## Integrity checks
 
