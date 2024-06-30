@@ -17,9 +17,7 @@ class Node{
     // Add a child to the children vector
     void add_child(Node *child)
     {
-
         children.push_back(child);
-        // cout << "Added child " << child->data << " to " << data << endl;
     }
     // Remove a child from the children vector
     void remove_child(Node *child)
@@ -36,15 +34,9 @@ class Node{
 
     T get_value()
     {
-       // cout << data << " ";
         return data;
     }
-    // Destructor
-    // ~Node(){
-    //     for (int i = 0; i < children.size(); i++){
-    //         delete children[i];
-    //     }
-    // }
+   
 };
 
 #endif

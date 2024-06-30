@@ -57,17 +57,11 @@ public:
         return *this;
     }
 
-    //    in_order_iterator operator++(int)
-    // {
-    //     in_order_iterator it = *this;
-    //     ++(*this);
-    //     return it;
-    // }
 
-    // Node<T> &operator*() const
-    // {
-    //     return *current;
-    // }
+    Node<T> &operator*() const
+    {
+        return *current;
+    }
 
     // Arrow operator
     Node<T> *operator->() const
@@ -285,12 +279,6 @@ public:
         return *this;
     }
 
-    bfs_iterator operator++(int)
-    {
-        bfs_iterator it = *this;
-        ++(*this);
-        return it;
-    }
 
     Node<T> *operator->() const
     {
@@ -316,6 +304,7 @@ public:
 // // begin_dfs_scan, end_dfs_scan the methods returns itreators to pass on tree use dfs
 template <typename T>
 class dfs_iterator
+
 {
 private:
     std::stack<Node<T> *> stack;
@@ -355,13 +344,6 @@ public:
         return *this;
     }
 
-    dfs_iterator operator++(int)
-    {
-        dfs_iterator it = *this;
-        ++(*this);
-        return it;
-    }
-
     Node<T> *operator->() const
     {
         return current;
@@ -378,6 +360,82 @@ public:
     }
 
     bool operator!=(const dfs_iterator &other) const
+    {
+        return !(*this == other);
+    }
+};
+
+template <typename T>
+class heap_iterator
+{
+private:
+    std::vector<Node<T> *> nodes;
+    size_t index;
+    // Flatten the tree into a vector
+    void flatten(Node<T> *node)
+    {
+        if (node == nullptr)
+            return;
+        nodes.push_back(node);
+        for (auto child : node->children)
+        {
+            flatten(child);
+        }
+    }
+
+public:
+    heap_iterator(Node<T> *root) : index(0)
+    {
+        if (root != nullptr)
+        {
+            flatten(root);
+            std::make_heap(nodes.begin(), nodes.end(), [](Node<T> *a, Node<T> *b)
+                           {
+                               return a->data > b->data; // Min-heap comparator
+                           });
+        }
+    }
+
+    heap_iterator &operator++()
+    {
+        if (nodes.empty())
+        {
+            return *this;
+        }
+        if (!nodes.empty())
+        {
+            std::pop_heap(nodes.begin(), nodes.end(), [](Node<T> *a, Node<T> *b)
+                          {
+                              return a->data > b->data; // Min-heap comparator
+                          });
+            nodes.pop_back();
+        }
+        return *this;
+    }
+
+    heap_iterator operator++(int)
+    {
+        heap_iterator it = *this;
+        ++(*this);
+        return it;
+    }
+
+    Node<T> *operator->() const
+    {
+        return nodes.front();
+    }
+
+    Node<T> &operator*() const
+    {
+        return *nodes.front();
+    }
+
+    bool operator==(const heap_iterator &other) const
+    {
+        return nodes.empty() && other.nodes.empty();
+    }
+
+    bool operator!=(const heap_iterator &other) const
     {
         return !(*this == other);
     }
