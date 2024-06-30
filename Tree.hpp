@@ -25,7 +25,7 @@ public:
     ~Tree()
     {
         clearTree(root);
-        root->children.clear();
+        root->get_children().clear();
     }
 
     void clearTree(Node<T> *node)
@@ -34,13 +34,13 @@ public:
             return; // Check if the node is null
 
         // Recursively clear children vectors for all children nodes
-        if (!node->children.empty())
+        if (!node->get_children().empty())
         {
-            for (auto child : node->children)
+            for (auto child : node->get_children())
             {
                 clearTree(child); // Recursively clear the children of the child node
             }
-            node->children.clear(); // Clear the children vector of the current node
+            node->get_children().clear(); // Clear the children vector of the current node
         }
     }
 
@@ -53,7 +53,7 @@ public:
     // add_sub_node
     void add_sub_node(Node<T> &parent_node, Node<T> &node)
     {
-        if (parent_node.children.size() < k)
+        if (parent_node.get_children().size() < k)
         {
             // cout << "Adding child " << node.data << " to " << parent_node.data << endl;
             parent_node.add_child(&node);
@@ -126,9 +126,9 @@ public:
     {
 
         // for each child of the current node, draw a line between the node and the child and call the function recursively to draw the child
-        for (auto i = 0u; i < node->children.size(); ++i)
+        for (auto i = 0u; i < node->get_children().size(); ++i)
         {
-            float new_x = x + (i - node->children.size() / 2.0) * x_offset;
+            float new_x = x + (i - node->get_children().size() / 2.0) * x_offset;
             float new_y = y + y_offset;
 
             // draw a line between the node and the child
@@ -139,7 +139,7 @@ public:
             window.draw(line, 2, sf::Lines);
 
             // call the function recursively to draw the child
-            draw_tree(window, node->children[i], new_x, new_y, x_offset / 2, y_offset, font);
+            draw_tree(window, node->get_children()[i], new_x, new_y, x_offset / 2, y_offset, font);
         }
 
         if (node == nullptr)
@@ -209,7 +209,7 @@ public:
     ~Tree()
     {
         clearTree(root);
-        root->children.clear();
+        root->get_children().clear();
     }
 
     void clearTree(Node<T> *node)
@@ -218,13 +218,13 @@ public:
             return; // Check if the node is null
 
         // Recursively clear children vectors for all children nodes
-        if (!node->children.empty())
+        if (!node->get_children().empty())
         {
-            for (auto child : node->children)
+            for (auto child : node->get_children())
             {
                 clearTree(child); // Recursively clear the children of the child node
             }
-            node->children.clear(); // Clear the children vector of the current node
+            node->get_children().clear(); // Clear the children vector of the current node
         }
     }
 
@@ -237,7 +237,7 @@ public:
     // add_sub_node
     void add_sub_node(Node<T> &parent_node, Node<T> &node)
     {
-        if (parent_node.children.size() < 2)
+        if (parent_node.get_children().size() < 2)
         {
             // cout << "Adding child " << node.data << " to " << parent_node.data << endl;
             parent_node.add_child(&node);
@@ -310,9 +310,9 @@ public:
     {
 
         // for each child of the current node, draw a line between the node and the child and call the function recursively to draw the child
-        for (auto i = 0u; i < node->children.size(); ++i)
+        for (auto i = 0u; i < node->get_children().size(); ++i)
         {
-            float new_x = x + (i - node->children.size() / 2.0) * x_offset;
+            float new_x = x + (i - node->get_children().size() / 2.0) * x_offset;
             float new_y = y + y_offset;
 
             // draw a line between the node and the child
@@ -323,7 +323,7 @@ public:
             window.draw(line, 2, sf::Lines);
 
             // call the function recursively to draw the child
-            draw_tree(window, node->children[i], new_x, new_y, x_offset / 2, y_offset, font);
+            draw_tree(window, node->get_children()[i], new_x, new_y, x_offset / 2, y_offset, font);
         }
 
         if (node == nullptr)

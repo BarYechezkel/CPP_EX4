@@ -14,8 +14,8 @@ private:
         while (node != nullptr)
         {
             stack.push(node);
-            if (!node->children.empty())
-                node = node->children[0]; // Go to leftmost child
+            if (!node->get_children().empty())
+                node = node->get_children()[0]; // Go to leftmost child
             else
                 break;
         }
@@ -39,9 +39,9 @@ public:
             return *this;
 
         // If current node has a right child, push the right child and all its left children
-        if (!current->children.empty() && current->children.size() > 1)
+        if (!current->get_children().empty() && current->get_children().size() > 1)
         {
-            Node<T> *temp = current->children[1]; // Right child
+            Node<T> *temp = current->get_children()[1]; // Right child
             push_most_left_child(temp);
         }
 
@@ -112,9 +112,9 @@ public:
         stack.pop();
 
         // Push children onto the stack in reverse order (right child first, then left child)
-        for (int i = current->children.size() - 1; i >= 0; i--)
+        for (int i = current->get_children().size() - 1; i >= 0; i--)
         {
-            stack.push(current->children[i]);
+            stack.push(current->get_children()[i]);
         }
         if (!stack.empty())
         {
@@ -193,14 +193,14 @@ public:
             {
                 stack.top().second = true; // Mark node as visited
                 // Push right child with false (not visited) first
-                if (node->children.size() > 1)
+                if (node->get_children().size() > 1)
                 {
-                    stack.push({node->children[1], false});
+                    stack.push({node->get_children()[1], false});
                 }
                 // Push left child with false (not visited)
-                if (node->children.size() > 0)
+                if (node->get_children().size() > 0)
                 {
-                    stack.push({node->children[0], false});
+                    stack.push({node->get_children()[0], false});
                 }
             }
         }
@@ -267,7 +267,7 @@ public:
             queue.pop();
 
             // Enqueue all children of current node
-            for (Node<T> *child : current->children)
+            for (Node<T> *child : current->get_children())
             {
                 queue.push(child);
             }
@@ -304,7 +304,6 @@ public:
 // // begin_dfs_scan, end_dfs_scan the methods returns itreators to pass on tree use dfs
 template <typename T>
 class dfs_iterator
-
 {
 private:
     std::stack<Node<T> *> stack;
@@ -332,7 +331,7 @@ public:
             stack.pop();
 
             // Push children onto the stack in reverse order (right child first, then left child)
-            for (auto it = current->children.rbegin(); it != current->children.rend(); ++it)
+            for (auto it = current->get_children().rbegin(); it != current->get_children().rend(); ++it)
             {
                 stack.push(*it);
             }
@@ -377,7 +376,7 @@ private:
         if (node == nullptr)
             return;
         nodes.push_back(node);
-        for (auto child : node->children)
+        for (auto child : node->get_children())
         {
             flatten(child);
         }
@@ -391,7 +390,7 @@ public:
             flatten(root);
             std::make_heap(nodes.begin(), nodes.end(), [](Node<T> *a, Node<T> *b)
                            {
-                               return a->data > b->data; // Min-heap comparator
+                               return a->get_value() > b->get_value(); // Min-heap comparator
                            });
         }
     }
@@ -406,7 +405,7 @@ public:
         {
             std::pop_heap(nodes.begin(), nodes.end(), [](Node<T> *a, Node<T> *b)
                           {
-                              return a->data > b->data; // Min-heap comparator
+                              return a->get_value() > b->get_value(); // Min-heap comparator
                           });
             nodes.pop_back();
         }
