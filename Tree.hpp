@@ -19,6 +19,19 @@ class Tree {
     // // Attributes
     Node<T> *root;
 
+     void clearTree(Node<T> *node) {
+        if (node == nullptr)
+            return;  // Check if the node is null
+
+        // Recursively clear children vectors for all children nodes
+        if (!node->get_children().empty()) {
+            for (auto child : node->get_children()) {
+                clearTree(child);  // Recursively clear the children of the child node
+            }
+            node->get_children().clear();  // Clear the children vector of the current node
+        }
+    }
+
     // function to draw the tree using SFML library
     void draw_tree(sf::RenderWindow &window, Node<T> *node, float x, float y, float x_offset, float y_offset, sf::Font &font) {
         // Increase the distance between nodes by adjusting these multipliers
@@ -69,18 +82,7 @@ class Tree {
         window.draw(text);
     }
 
-    void clearTree(Node<T> *node) {
-        if (node == nullptr)
-            return;  // Check if the node is null
-
-        // Recursively clear children vectors for all children nodes
-        if (!node->get_children().empty()) {
-            for (auto child : node->get_children()) {
-                clearTree(child);  // Recursively clear the children of the child node
-            }
-            node->get_children().clear();  // Clear the children vector of the current node
-        }
-    }
+   
 
    public:
     // Constructor
