@@ -22,16 +22,17 @@ class in_order_iterator {
         }
     }
 
-   public:
-// Constructor
+public:
+    // Constructor
     in_order_iterator(Node<T> *root) : current(nullptr) {
+        if (root != nullptr) { // Check if the tree is not empty
             push_most_left_child(root);
             if (!stack.empty()) {
                 current = stack.top();  // Leftmost child
                 stack.pop();            // Pop the leftmost child
             }
+        }
     }
-
     in_order_iterator &operator++() {
         if (current == nullptr)
             return *this;
@@ -69,6 +70,7 @@ class in_order_iterator {
     bool operator!=(const in_order_iterator &other) const {
         return !(*this == other);
     }
+    
 };
 
 // begin_pre_order, end_pre_order the methods returns itreators to pass on tree in pre order
