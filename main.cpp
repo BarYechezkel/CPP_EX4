@@ -10,12 +10,12 @@ using namespace std;
 int main() {
 
     
-    Node<double> root_node = Node(1.1);
-    Node<double> n1 = Node(1.2);
-    Node<double> n2 = Node(1.3);
-    Node<double> n3 = Node(1.4);
-    Node<double> n4 = Node(1.5);
-    Node<double> n5 = Node(1.6);
+    Node<double> root_node(1.1);
+    Node<double> n1(1.2);
+    Node<double> n2(1.3);
+    Node<double> n3(1.4);
+    Node<double> n4(1.5);
+    Node<double> n5(1.6);
     Tree<double> tree;  // Binary tree that contains doubles.
     tree.add_root(&root_node);
 
@@ -100,12 +100,12 @@ int main() {
     three_ary_tree.render_tree();
 
     // tree of complex numbers
-    Node<Complex> root_node_complex = Node(Complex(1.1, 2.2));
-    Node<Complex> n1_complex = Node(Complex(1.2, 2.3));
-    Node<Complex> n2_complex = Node(Complex(1.3, 2.4));
-    Node<Complex> n3_complex = Node(Complex(1.4, 2.5));
-    Node<Complex> n4_complex = Node(Complex(1.5, 2.6));
-    Node<Complex> n5_complex = Node(Complex(1.6, 2.7));
+    Node<Complex> root_node_complex(Complex(1.1, 2.2));
+    Node<Complex> n1_complex(Complex(1.2, 2.3));
+    Node<Complex> n2_complex(Complex(1.3, 2.4));
+    Node<Complex> n3_complex(Complex(1.4, 2.5));
+    Node<Complex> n4_complex(Complex(1.5, 2.6));
+    Node<Complex> n5_complex(Complex(1.6, 2.7));
     Tree<Complex> tree_complex;  // Binary tree that contains doubles.
     tree_complex.add_root(&root_node_complex);
 
@@ -124,22 +124,6 @@ int main() {
 
     tree_complex.render_tree();
 
-
-    //  Node<int> rootnode(1);
-    // Node<int> n11(2);
-    // Node<int> n22(3);
-    // Node<int> n33(4);
-    // Node<int> n44(5);
-    // Node<int> n55(6);
-    // Tree<int> tree_right;  // Binary tree that contains doubles.
-    // tree_right.add_root(&rootnode);
-
-    // tree_right.add_sub_node(&rootnode, &n11);
-    // tree_right.add_sub_node(&rootnode, &n22);
-    // tree_right.add_sub_node(&n11, nullptr);
-    // tree_right.add_sub_node(&n11, &n44);
-    // tree_right.add_sub_node(&n22, &n55);
-    // tree_right.render_tree();
 
     return 0;
 }
