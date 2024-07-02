@@ -1,133 +1,108 @@
 #ifndef TREE_HPP
 #define TREE_HPP
-#include "Node.hpp"
-#include <stack>
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <queue>
-#include <SFML/Graphics.hpp>
-#include "Iterators.hpp"
 #include <sstream>
+#include <stack>
+#include <stdexcept>
+
+#include "Iterators.hpp"
+#include "Node.hpp"
 
 using namespace std;
 
 template <typename T, int k = 2>
 
-class Tree
-{
-private:
+class Tree {
+   private:
     // // Attributes
     Node<T> *root;
 
-public:
+   public:
     // Constructor
     Tree() : root(nullptr) {}
     // Destructor delete root and all its children
-    ~Tree()
-    {
+    ~Tree() {
         clearTree(root);
         root->get_children().clear();
     }
 
-    void clearTree(Node<T> *node)
-    {
+    void clearTree(Node<T> *node) {
         if (node == nullptr)
-            return; // Check if the node is null
+            return;  // Check if the node is null
 
         // Recursively clear children vectors for all children nodes
-        if (!node->get_children().empty())
-        {
-            for (auto child : node->get_children())
-            {
-                clearTree(child); // Recursively clear the children of the child node
+        if (!node->get_children().empty()) {
+            for (auto child : node->get_children()) {
+                clearTree(child);  // Recursively clear the children of the child node
             }
-            node->get_children().clear(); // Clear the children vector of the current node
+            node->get_children().clear();  // Clear the children vector of the current node
         }
     }
 
     // Add root
-    void add_root(Node<T> &node_root)
-    {
-        root = &node_root;
+    void add_root(Node<T>* node_root) {
+        if (node_root == nullptr){
+            throw std::invalid_argument("Root node cannot be null");
+        }
+        root = node_root;
     }
 
     // add_sub_node
-    void add_sub_node(Node<T> &parent_node, Node<T> &node)
-    {
-        if (parent_node.get_children().size() < k)
-        {
+    void add_sub_node(Node<T> *parent_node, Node<T> *node) {
+        if (parent_node->get_children().size() < k) {
             // cout << "Adding child " << node.data << " to " << parent_node.data << endl;
-            parent_node.add_child(&node);
+            parent_node->add_child(node);
         }
     }
 
     // Remove a child from the root node
-    void remove_child(T data)
-    {
+    void remove_child(T data) {
         Node<T> *child = new Node<T>(data);
         root->remove_child(child);
     }
 
-    dfs_iterator<T> begin_in_order()
-    {
+    dfs_iterator<T> begin_in_order() {
         return dfs_iterator<T>(root);
     }
-    dfs_iterator<T> end_in_order()
-    {
+    dfs_iterator<T> end_in_order() {
         return dfs_iterator<T>(nullptr);
     }
 
-    dfs_iterator<T> begin_pre_order()
-    {
+    dfs_iterator<T> begin_pre_order() {
         return dfs_iterator<T>(root);
     }
-    dfs_iterator<T> end_pre_order()
-    {
+    dfs_iterator<T> end_pre_order() {
         return dfs_iterator<T>(nullptr);
     }
 
-    dfs_iterator<T> begin_post_order()
-    {
+    dfs_iterator<T> begin_post_order() {
         return dfs_iterator<T>(root);
     }
-    dfs_iterator<T> end_post_order()
-    {
+    dfs_iterator<T> end_post_order() {
         return dfs_iterator<T>(nullptr);
     }
 
-    bfs_iterator<T> begin_bfs_scan()
-    {
+    bfs_iterator<T> begin_bfs_scan() {
         return bfs_iterator<T>(root);
     }
-    bfs_iterator<T> end_bfs_scan()
-    {
-        return bfs_iterator<T>(NULL);
+    bfs_iterator<T> end_bfs_scan() {
+        return bfs_iterator<T>(nullptr);
     }
 
-    dfs_iterator<T> begin_dfs_scan()
-    {
+    dfs_iterator<T> begin_dfs_scan() {
         return dfs_iterator<T>(root);
     }
-    dfs_iterator<T> end_dfs_scan()
-    {
+    dfs_iterator<T> end_dfs_scan() {
         return dfs_iterator<T>(nullptr);
     }
 
-    heap_iterator<T> begin_heap_scan()
-    {
-        return heap_iterator<T>(root);
-    }
-    heap_iterator<T> end_heap_scan()
-    {
-        return heap_iterator<T>(nullptr);
-    }
 
     // function to draw the tree using SFML library
-    void draw_tree(sf::RenderWindow &window, Node<T> *node, float x, float y, float x_offset, float y_offset, sf::Font &font)
-    {
-
+    void draw_tree(sf::RenderWindow &window, Node<T> *node, float x, float y, float x_offset, float y_offset, sf::Font &font) {
         // for each child of the current node, draw a line between the node and the child and call the function recursively to draw the child
-        for (auto i = 0u; i < node->get_children().size(); ++i)
-        {
+        for (auto i = 0u; i < node->get_children().size(); ++i) {
             float new_x = x + (i - node->get_children().size() / 2.0) * x_offset;
             float new_y = y + y_offset;
 
@@ -165,22 +140,18 @@ public:
     }
 
     // function to render the tree
-    void render_tree()
-    {
+    void render_tree() {
         sf::RenderWindow window(sf::VideoMode(1200, 700), "Tree Visualization");
 
         sf::Font font;
-        if (!font.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"))
-        {
+        if (!font.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")) {
             std::cerr << "Error loading font\n";
             return;
         }
 
-        while (window.isOpen())
-        {
+        while (window.isOpen()) {
             sf::Event event;
-            while (window.pollEvent(event))
-            {
+            while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
                     window.close();
             }
@@ -196,122 +167,106 @@ public:
 
 // specialisation of the Tree class for k=2
 template <typename T>
-class Tree<T, 2>
-{
-private:
+class Tree<T, 2> {
+   private:
     // // Attributes
     Node<T> *root;
 
-public:
+   public:
     // Constructor
     Tree() : root(nullptr) {}
     // Destructor delete root and all its children
-    ~Tree()
-    {
+    ~Tree() {
         clearTree(root);
         root->get_children().clear();
     }
 
-    void clearTree(Node<T> *node)
-    {
+    void clearTree(Node<T> *node) {
         if (node == nullptr)
-            return; // Check if the node is null
+            return;  // Check if the node is null
 
         // Recursively clear children vectors for all children nodes
-        if (!node->get_children().empty())
-        {
-            for (auto child : node->get_children())
-            {
-                clearTree(child); // Recursively clear the children of the child node
+        if (!node->get_children().empty()) {
+            for (auto child : node->get_children()) {
+                clearTree(child);  // Recursively clear the children of the child node
             }
-            node->get_children().clear(); // Clear the children vector of the current node
+            node->get_children().clear();  // Clear the children vector of the current node
         }
     }
 
     // Add root
-    void add_root(Node<T> &node_root)
-    {
-        root = &node_root;
+    void add_root(Node<T>* node_root) {
+        if (node_root == nullptr){
+            throw std::invalid_argument("Root node cannot be null");
+        }
+        root = node_root;
     }
 
     // add_sub_node
-    void add_sub_node(Node<T> &parent_node, Node<T> &node)
-    {
-        if (parent_node.get_children().size() < 2)
-        {
+    void add_sub_node(Node<T> *parent_node, Node<T> *node) {
+        if (parent_node->get_children().size() < 2) {
             // cout << "Adding child " << node.data << " to " << parent_node.data << endl;
-            parent_node.add_child(&node);
+            parent_node->add_child(node);
         }
     }
 
+    // get root
+    Node<T> *get_root() {
+        return root;
+    }
+
     // Remove a child from the root node
-    void remove_child(T data)
-    {
+    void remove_child(T data) {
         Node<T> *child = new Node<T>(data);
         root->remove_child(child);
     }
 
-    in_order_iterator<T> begin_in_order()
-    {
+    in_order_iterator<T> begin_in_order() {
         return in_order_iterator<T>(root);
     }
-    in_order_iterator<T> end_in_order()
-    {
-        return in_order_iterator<T>(NULL);
+    in_order_iterator<T> end_in_order() {
+        return in_order_iterator<T>(nullptr);
     }
 
-    pre_order_iterator<T> begin_pre_order()
-    {
+    pre_order_iterator<T> begin_pre_order() {
         return pre_order_iterator<T>(root);
     }
-    pre_order_iterator<T> end_pre_order()
-    {
-        return pre_order_iterator<T>(NULL);
+    pre_order_iterator<T> end_pre_order() {
+        return pre_order_iterator<T>(nullptr);
     }
 
-    post_order_iterator<T> begin_post_order()
-    {
+    post_order_iterator<T> begin_post_order() {
         return post_order_iterator<T>(root);
     }
-    post_order_iterator<T> end_post_order()
-    {
-        return post_order_iterator<T>(NULL);
+    post_order_iterator<T> end_post_order() {
+        return post_order_iterator<T>(nullptr);
     }
 
-    bfs_iterator<T> begin_bfs_scan()
-    {
+    bfs_iterator<T> begin_bfs_scan() {
         return bfs_iterator<T>(root);
     }
-    bfs_iterator<T> end_bfs_scan()
-    {
-        return bfs_iterator<T>(NULL);
+    bfs_iterator<T> end_bfs_scan() {
+        return bfs_iterator<T>(nullptr);
     }
 
-    dfs_iterator<T> begin_dfs_scan()
-    {
+    dfs_iterator<T> begin_dfs_scan() {
         return dfs_iterator<T>(root);
     }
-    dfs_iterator<T> end_dfs_scan()
-    {
+    dfs_iterator<T> end_dfs_scan() {
         return dfs_iterator<T>(nullptr);
     }
 
-    heap_iterator<T> begin_heap_scan()
-    {
+    heap_iterator<T> begin_heap_scan() {
         return heap_iterator<T>(root);
     }
-    heap_iterator<T> end_heap_scan()
-    {
+    heap_iterator<T> end_heap_scan() {
         return heap_iterator<T>(nullptr);
     }
 
     // function to draw the tree using SFML library
-    void draw_tree(sf::RenderWindow &window, Node<T> *node, float x, float y, float x_offset, float y_offset, sf::Font &font)
-    {
-
+    void draw_tree(sf::RenderWindow &window, Node<T> *node, float x, float y, float x_offset, float y_offset, sf::Font &font) {
         // for each child of the current node, draw a line between the node and the child and call the function recursively to draw the child
-        for (auto i = 0u; i < node->get_children().size(); ++i)
-        {
+        for (auto i = 0u; i < node->get_children().size(); ++i) {
             float new_x = x + (i - node->get_children().size() / 2.0) * x_offset;
             float new_y = y + y_offset;
 
@@ -349,22 +304,18 @@ public:
     }
 
     // function to render the tree
-    void render_tree()
-    {
+    void render_tree() {
         sf::RenderWindow window(sf::VideoMode(1200, 700), "Tree Visualization");
 
         sf::Font font;
-        if (!font.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"))
-        {
+        if (!font.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")) {
             std::cerr << "Error loading font\n";
             return;
         }
 
-        while (window.isOpen())
-        {
+        while (window.isOpen()) {
             sf::Event event;
-            while (window.pollEvent(event))
-            {
+            while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
                     window.close();
             }
