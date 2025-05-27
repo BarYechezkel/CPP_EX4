@@ -2,7 +2,6 @@
 
 ## Author
 - Bar Yechezkel
-- Email: baryechezkel@gmail.com
 
 ## Overview
 This project is a C++ implementation of a generic tree data structure. It utilizes the SFML library for graphical visualization.
